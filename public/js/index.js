@@ -1,5 +1,7 @@
 /* 
 前端用于请求后台的接口数据，index.js
+缺点：出现“回调地狱”的问题，比如：editBook方法中连续两次嵌套发起了ajax请求；而该请求又嵌套在初始化页面请求的ajax中
+ES6 promise ES7 async await专门解决这个问题
 */
 $(function () {
 	// 打开页面获取所有图书列表信息
