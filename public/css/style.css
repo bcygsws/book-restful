@@ -1,0 +1,56 @@
+.title {
+	text-align: center;
+	background-color: lightgreen;
+	width: 600px;
+	margin: 0 auto;
+	margin-top: 100px;
+}
+.title a {
+	font-size: 14px;
+}
+table.tb {
+	width: 600px;
+	margin: 0 auto;
+	border-left: 1px solid black;
+	border-top: 1px solid black;
+}
+table.tb tr th,
+table.tb tr td {
+	text-align: center;
+	border-right: 1px solid black;
+	border-bottom: 1px solid black;
+	border-collapse: collapse;
+	background-color: hotpink;
+}
+table.tb tr th {
+	background-color: lightgreen;
+}
+/* 弹窗里表单的样式 */
+.form {
+	display: none;
+	/* 通过检查弹窗，发现.form父元素是绝对定位了 */
+	position: absolute;
+	left: 50%;
+	top: 60px;
+	transform: translateX(-50%);
+}
+.form {
+	width: 400px;
+	height: 300px;
+}
+.form table {
+	width: 100%;
+}
+.form tr td{
+  text-align: center;
+}
+.form tr td:nth-child(2n+1) {
+	width: 60px;
+}
+.form tr td:nth-child(2n) input{
+  width: 320px;
+}
+#btn{
+  width: 100px;
+}
+

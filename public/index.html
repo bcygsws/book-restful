@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>案例-图书管理系统</title>
+		<!-- public中的静态资源文件，托管时，直接放置在http://localhost:3000/style.css中了，因此下面的路径不包括public了  -->
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+		<!-- 引入jquery文件 -->
+		<script src="./js/jquery.js"></script>
+		<!-- 引入模板引擎js文件，等同于npm方式安装的art-template或者express-art-template-->
+		<script src="./js/template-web.js"></script>
+		<!-- 前端用于调用接口数据的js文件 -->
+		<script src="./js/dialog.js"></script>
+		<script src="./js/index.js"></script>
+		<script type="text/template" id="indexTpl">
+				{{each list val}}
+			<tr>
+				<td>{{val.id}}</td>
+				<td>{{val.name}}</td>
+				<td>{{val.author}}</td>
+				<td>{{val.category}}</td>
+				<td>{{val.description}}</td>
+				<td><a href="javascript:;" id="alter">修改</a>&nbsp;&nbsp;<a href="javascript:;" id="del">删除</a></td>
+			</tr>
+			{{/each}}
+		</script>
+	</head>
+	<body>
+		<h3 class="title">图书管理系统<a id="add" href="javascript:;">添加图书</a></h3>
+		<table cellspacing="0" cellpadding="5" class="tb">
+			<thead>
+				<tr>
+					<th>编号</th>
+					<th>图书名称</th>
+					<th>作者</th>
+					<th>分类</th>
+					<th>描述</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody id="dataList"></tbody>
+		</table>
+		<!-- 弹窗中的表单 ，默认关闭，弹窗的时候，才显示出来-->
+		<form action="" class="form">
+			<table cellspacing="0" cellpadding="5" border="0">
+				<tr>
+					<td>名称：</td>
+					<!-- 保持与数据库中字段name一致，添加操作时，req.body获取的对象，可以直接作为数据库传入的data -->
+					<td><input type="hidden" name="id" /><input type="text" name="name" id="user" /></td>
+				</tr>
+				<tr>
+					<td>作者：</td>
+					<td><input type="text" name="author" id="author" /></td>
+				</tr>
+				<tr>
+					<td>分类：</td>
+					<td><input type="text" name="category" id="category" /></td>
+				</tr>
+				<tr>
+					<td>描述：</td>
+					<td><input type="text" name="description" id="desc" /></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input type="button" value="提交" id="btn" /></td>
+				</tr>
+			</table>
+		</form>
+	</body>
+</html>
