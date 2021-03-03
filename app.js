@@ -57,8 +57,8 @@ app.use('/www', express.static('public'));
 const bodyParser = require('body-parser');
 // 解析提交字符串,对于post请求中，service.js中使用res.body获取
 app.use(bodyParser.urlencoded({ extended: false }));
-// 解析提交的json格式字符串
-// app.use(bodyParser.json());
+// 解析提交的json格式字符串，前端axios有时候post请求方式，需要声明该语句
+app.use(bodyParser.json());
 // 添加一个中间件函数，实现跨域请求，参考：https://www.cnblogs.com/pdcan/p/12201930.html
 // app.all('*', (req, res, next) => {
 // 	// 设置跨域域名的三种方式：
