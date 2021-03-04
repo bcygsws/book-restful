@@ -1,6 +1,7 @@
 const db = require('./db.js');
 exports.allBooks = (req, res) => {
-	const sql = 'SELECT *from book';
+	// order by 字段 asc(ascend 升序)  desc (descend降序排列)
+	const sql = 'SELECT *from book order by id asc';
 	db.base(sql, null, results => {
 		// json格式数据
 		res.json(results);
