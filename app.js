@@ -77,7 +77,7 @@ app.use(bodyParser.json());
 // 	res.header('Access-Control-Allow-Headers', 'Content-type');
 // 	// 跨域允许的请求方式
 // 	res.header('Access-Control-Allow-Methods', 'PUT,DELETE,GET,POST,OPTIONS');
-// 	res.header('Access-Control-Max-Age', 172800); // 预请求缓存20天
+// 	res.header('Access-Control-Max-Age', 1728000); // 预请求缓存20天
 // 	next();
 // });
 app.use(router);
