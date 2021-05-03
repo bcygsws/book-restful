@@ -1,7 +1,18 @@
 /**
  * 本项目：配合vue-recall项目 实现element+vue+express+mysql+cors 前后端分离项目（图书管理案例）
- * 
+ *
  * 开发后台接口-restful形式的数据接口
+ * 关于RESTFUL 参考：https://blog.csdn.net/qq_41606973/article/details/86352787
+ * a.先理解URI的概念：
+ * URI 表示资源，表示服务器端领域模型中的实体类，是一种抽象的概念
+ * b.URI的规则：
+ * 1.不用大写字母
+ * 2.使用中杠 "-" ，而不用下杠"_"
+ * 3.参数要encode(编码)
+ * 4.其中的名词要使用复数
+ *
+ *
+ *
  * 1.restful不是从数据格式来划分的，而是从URL的格式来表述的
  *
  * 2.restful风格的URL与传统风格的比较：
@@ -58,10 +69,11 @@ app.use(cors({
 // 设置虚拟目录 /www 访问时，需要加上
 // app.use('/www', express.static('public'));
 app.use('/', express.static('public'));
+// body-parser中间件，是用来解析http请求体的。参考：https://blog.csdn.net/DlMmU/article/details/55563090
 const bodyParser = require('body-parser');
-// 解析提交字符串,对于post请求中，service.js中使用res.body获取
+// 解析提交的字符串（application/x-www-form-urlencoded）,使得node后台支持该种请求体，否则service.js文件中req.body拿不到值
 app.use(bodyParser.urlencoded({ extended: false }));
-// 解析提交的json格式字符串，前端axios有时候post请求方式，需要声明该语句
+// 解析提交的json格式字符串(application/json)，前端axios有时候post请求方式，需要声明该语句
 app.use(bodyParser.json());
 // 添加一个中间件函数，实现跨域请求，参考：https://www.cnblogs.com/pdcan/p/12201930.html
 // app.all('*', (req, res, next) => {
