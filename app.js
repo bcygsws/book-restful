@@ -1,4 +1,6 @@
 /**
+ * 本项目：配合vue-recall项目 实现element+vue+express+mysql+cors 前后端分离项目（图书管理案例）
+ * 
  * 开发后台接口-restful形式的数据接口
  * 1.restful不是从数据格式来划分的，而是从URL的格式来表述的
  *
@@ -53,7 +55,9 @@ app.use(cors({
 
 */
 // 托管静态资源文件
-app.use('/www', express.static('public'));
+// 设置虚拟目录 /www 访问时，需要加上
+// app.use('/www', express.static('public'));
+app.use('/', express.static('public'));
 const bodyParser = require('body-parser');
 // 解析提交字符串,对于post请求中，service.js中使用res.body获取
 app.use(bodyParser.urlencoded({ extended: false }));
