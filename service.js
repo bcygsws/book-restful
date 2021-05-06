@@ -13,6 +13,10 @@ exports.toAddBook = (req, res) => {
 };
 // 提交添加
 exports.addBook = (req, res) => {
+	// info是一条记录，数据类型是一个对象
+	/* 
+	比如：成功添加了id=40的这条数据，只需要提供数据就可以了。id会由数据库自动增加
+	*/
 	const info = req.body;
 	console.log(info);
 	const sql = 'insert into book set ?';
