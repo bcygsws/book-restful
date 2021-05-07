@@ -13,6 +13,8 @@ router.get('/books/book/:id', service.toEditBook);
 router.put('/books/book', service.editBook);
 // 删除某一本图书
 router.delete('/books/book/:id', service.deleteBook);
-// 导出模块用module.exports 
+// 分页获取数据
+router.get('/books/:size/pages/:current', service.getPageBook);
+// 导出模块用module.exports
 // exports.变量(函数)=值（变量值或函数值） 完全等价于 module.exports.变量(函数)=值（变量值或函数值）
 module.exports = router;

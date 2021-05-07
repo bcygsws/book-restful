@@ -70,3 +70,23 @@ exports.deleteBook = (req, res) => {
 		}
 	});
 };
+// 分页获取表格数据
+exports.getPageBook = (req, res) => {
+	// 获取参数对象，格式如：{size：'',current:''}
+	const info = req.params;
+	// 键值为字符串类型，string。通过遍历将参数转化成number
+	for (var key in info) {
+		// 将info对象中的键值转化为number类型
+		info[key] = parseInt(info[key]);
+	}
+	console.log(info);
+	console.log(typeof info.size);
+	const data = [info.size, info.current - 1];
+	// 使用inner join进行分页查询
+	const sql = `select * from book as a inner join (select id from book order by id limit 
+  ${data[1]},${data[0]}) as b on a.id=b.id order by a.id;select found_rows()`;
+	db.base(sql, null, results => {
+		console.log(results);
+		res.json(results);
+	});
+};
