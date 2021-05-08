@@ -84,9 +84,18 @@ exports.getPageBook = (req, res) => {
 	const data = [info.size, info.current - 1];
 	// 使用inner join进行分页查询
 	const sql = `select * from book as a inner join (select id from book order by id limit 
-  ${data[1]},${data[0]}) as b on a.id=b.id order by a.id;select found_rows()`;
+  ${data[1]},${data[0]}) as b on a.id=b.id order by a.id`;
+	// 存储合并后的结果集
+	// let allRes = [];
 	db.base(sql, null, results => {
+		// const sql2 = 'select count(*) as total from book';
+		// db.base(sql2, null, res => {
+		// 	console.log(res);
+		// 	allRes = results['total'];
+		// });
+		console.log(results.constructor);// Array
 		console.log(results);
+		// res.json(allRes);
 		res.json(results);
 	});
 };
