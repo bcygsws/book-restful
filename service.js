@@ -1,15 +1,30 @@
+/**
+ * @lodash 使用lodash合并数据
+ * 
+ */
 const db = require('./db.js');
-exports.allBooks = (req, res) => {
-	// order by 字段 asc(ascend 升序)  desc (descend降序排列)
-	const sql = 'SELECT *from book order by id asc';
-	db.base(sql, null, results => {
-		// json格式数据
-		res.json(results);
-	});
-};
+// 引入lodash
+const _ = require('lodash');
+/**
+ * 
+ * @ 表格数据通常采取分页显示：
+ * 下面的allBooks方法注释掉，使用下面的getPageBooks方法
+ * 
+ */
+// exports.allBooks = (req, res) => {
+// 	// order by 字段 asc(ascend 升序)  desc (descend降序排列)
+// 	const sql = 'SELECT *from book order by id asc';
+// 	db.base(sql, null, results => {
+// 		// json格式数据
+// 		res.json(results);
+// 	});
+// };
 // 去往添加图书页面
 exports.toAddBook = (req, res) => {
-	res.json({ code: 200, message: '成功进入添加图书页面' });
+	res.json({
+		code: 200,
+		message: '成功进入添加图书页面'
+	});
 };
 // 提交添加
 exports.addBook = (req, res) => {
@@ -23,9 +38,15 @@ exports.addBook = (req, res) => {
 	db.base(sql, info, results => {
 		if (results.affectedRows === 1) {
 			console.log(sql + '\n你成功添加一条数据!');
-			res.json({ code: 200, message: '成功添加一条图书信息' });
+			res.json({
+				code: 200,
+				message: '成功添加一条图书信息'
+			});
 		} else {
-			res.json({ code: 400, message: '请求错误' });
+			res.json({
+				code: 400,
+				message: '请求错误'
+			});
 		}
 	});
 };
@@ -46,9 +67,15 @@ exports.editBook = (req, res) => {
 	db.base(sql, data, results => {
 		if (results.affectedRows === 1) {
 			console.log(sql + '\n你成功更新了1条数据!');
-			res.json({ code: 200, message: '你成功更新了1条数据' });
+			res.json({
+				code: 200,
+				message: '你成功更新了1条数据'
+			});
 		} else {
-			res.json({ code: 400, message: '更新数据失败！' });
+			res.json({
+				code: 400,
+				message: '更新数据失败！'
+			});
 		}
 	});
 };
@@ -60,19 +87,25 @@ exports.deleteBook = (req, res) => {
 		if (results.affectedRows === 1) {
 			console.log(sql + '\n你成功删除一条图书信息!');
 			// res.redirect(400, '/');
-			res.json({ code: 200, message: '成功删除1条数据' });
+			res.json({
+				code: 200,
+				message: '成功删除1条数据'
+			});
 			// 不能再写了，写了将报错Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
 			// 原因是：res.end res.send res.json res.jsonp res.redirect这些响应请求的api,在同一个分之内只能调用其中一个，且最多调用1次
 			// 真实情境下，可以在前端实现页面的重定向
 			// res.redirect('/');
 		} else {
-			res.json({ code: 400, message: '删除1条数据失败' });
+			res.json({
+				code: 400,
+				message: '删除1条数据失败'
+			});
 		}
 	});
 };
 // 分页获取表格数据
-exports.getPageBook = (req, res) => {
-	// 获取参数对象，格式如：{size：'',current:''}
+exports.getPageBooks = (req, res) => {
+	// 获取参数对象，格式如：{size：'',curPage:''}
 	const info = req.params;
 	// 键值为字符串类型，string。通过遍历将参数转化成number
 	for (var key in info) {
@@ -81,22 +114,52 @@ exports.getPageBook = (req, res) => {
 	}
 	console.log(info);
 	console.log(typeof info.size);
-	const data = [info.size, info.current - 1];
-	// 使用inner join进行分页查询
-	const sql1 = `select * from book as a inner join (select id from book order by id limit 
-  ${data[1]},${data[0]}) as b on a.id=b.id order by a.id;`;
-	const sql2 = 'select count(*) as total from book';
+	const offset = info.size * (info.curPage - 1);
+	const size = info.size;
+	// 使用inner join进行分页查询 limit [offset偏移量，默认从0开始，可选值]，size
+	const sql = `select * from book as a inner join (select id from book order by id limit 
+  ${offset},${size}) as b on a.id=b.id order by a.id`;
 	// 存储合并后的结果集
 	// let allRes = [];
-	db.base(sql1 + sql2, null, results => {
-		// const sql2 = 'select count(*) as total from book';
-		// db.base(sql2, null, res => {
-		// 	console.log(res);
-		// 	allRes = results['total'];
-		// });
-		console.log(results.constructor); // Array
-		console.log(results);
-		// res.json(allRes);
-		res.json(results);
-	});
+	// db.base(sql, null, results => {
+	// 	// const sql2 = 'select count(*) as total from book';
+	// 	// db.base(sql2, null, res => {
+	// 	// 	console.log(res);
+	// 	// 	allRes = results['total'];
+	// 	// });
+	// 	console.log(results.constructor); // Array
+	// 	console.log(results);
+	// 	// res.json(allRes);
+	// 	res.json(results.concat([{ pagenum: info.current }]));
+	// });
+	function p1() {
+		const p1 = new Promise((resolve, reject) => {
+			db.base(sql, null, results => {
+				resolve({
+					list: results
+				});
+			})
+		});
+		return p1;
+	}
+	const sql2 = 'select count(1) as total from book';
+
+	function p2() {
+		const p2 = new Promise((resolve, reject) => {
+			db.base(sql2, null, results => {
+				resolve(results[0]);
+			});
+		});
+		return p2;
+	}
+	Promise.all([p1(), p2()]).then(val => {
+		const last = _.assignIn(val[0], val[1], {
+			pagenum: info.curPage
+		});
+		/* lodash assignIn方法会遍历并继承来源对象的属性（包含原型上的属性），将各个对象合并成一个含有多个键值对的对象 */
+		// console.log(_.assignIn(val[0], val[1], {
+		// 	pagenum: info.current
+		// }));
+		res.json(last);
+	})
 };
