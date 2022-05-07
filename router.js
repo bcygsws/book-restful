@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const service = require('./service.js');
 // 获取图书列表-列表里有多条记录，用复数；直接获取数据，用get方式
-// router.get('/books', service.allBooks);
+router.get('/books', service.allBooks);
 // 去往请求添加页面
 router.get('/books/book', service.toAddBook);
 // 提交添加页面

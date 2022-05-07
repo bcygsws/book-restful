@@ -6,6 +6,8 @@
  * a.先理解URI的概念：
  * URI 表示资源，表示服务器端领域模型中的实体类，是一种抽象的概念
  * b.URI的规则：
+ * Uniform Resource Identifier，URI)是一个用于标识某一互联网资源名称的字符串
+ *
  * 1.不用大写字母
  * 2.使用中杠 "-" ，而不用下杠"_"
  * 3.参数要encode(编码)
@@ -58,13 +60,12 @@ const cors = require('cors');
 // a.对客户端所有请求跨域
 app.use(cors({ origin: 'http://localhost:8787', credentials: true }));
 // b.对于单个或者多个域名跨域
-/* 
-app.use(cors({
-  origin: ['http://127.0.0.1:3006', 'http://127.0.0.1:5500'],
-  credentials: true
-}))
 
-*/
+// app.use(cors({
+//   origin: ['http://127.0.0.1:3006', 'http://127.0.0.1:3000'],
+//   credentials: true
+// }))
+
 // 托管静态资源文件
 // 设置虚拟目录 /www 访问时，需要加上
 // app.use('/www', express.static('public'));
@@ -72,7 +73,7 @@ app.use('/', express.static('public'));
 // body-parser中间件，是用来解析http请求体的。参考：https://blog.csdn.net/DlMmU/article/details/55563090
 const bodyParser = require('body-parser');
 // 解析提交的字符串（application/x-www-form-urlencoded）,使得node后台支持该种请求体，否则service.js文件中req.body拿不到值
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 // 解析提交的json格式字符串(application/json)，前端axios有时候post请求方式，需要声明该语句
 app.use(bodyParser.json());
 // 添加一个中间件函数，实现跨域请求，参考：https://www.cnblogs.com/pdcan/p/12201930.html
@@ -81,14 +82,14 @@ app.use(bodyParser.json());
 // 	// 1.设置允许跨域的域名，'*'代表所有域名都可以跨域
 // 	// res.header('Access-Control-Allow-Origin', '*');
 // 	// 2.允许域名http://localhost:8787跨域
-// 	// res.header('Access-Control-Allow-Origin', 'http://localhost:8787');
+// 	res.header('Access-Control-Allow-Origin', 'http://localhost:8787');
 // 	// 3.如果是要设置多个域名的跨域，可以用数组来存放域名
-// 	let originList = ['http://localhost:8787'];
-// 	// 数组中是否包含某个元素。如果这个分支成立，说明从客户端发来请求的域名，req.headers.origin存在于数组元素之中
-// 	if (originList.includes(req.headers.origin.toLowerCase())) {
-// 		// req.headers是属性 req.headers.origin req.header()是方法，req.method是属性，表示请求方式
-// 		res.header('Access-Control-Allow-Origin', req.headers.origin);
-// 	}
+// 	// let originList = ['http://localhost:8787'];
+// 	// // 数组中是否包含某个元素。如果这个分支成立，说明从客户端发来请求的域名，req.headers.origin存在于数组元素之中
+// 	// if (originList.includes(req.headers.origin.toLowerCase())) {
+// 	// 	// req.headers是属性 req.headers.origin req.header()是方法，req.method是属性，表示请求方式
+// 	// 	res.header('Access-Control-Allow-Origin', req.headers.origin);
+// 	// }
 // 	// 允许的header类型
 // 	res.header('Access-Control-Allow-Headers', 'Content-type');
 // 	// 跨域允许的请求方式
@@ -97,7 +98,7 @@ app.use(bodyParser.json());
 // 	next();
 // });
 app.use(router);
-const port = 3000;
+const port = 3001;
 app.listen(port, () => {
 	console.log('Example running at http://localhost:' + port);
 });
