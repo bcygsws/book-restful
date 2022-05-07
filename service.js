@@ -12,9 +12,9 @@ const _ = require('lodash');
  *
  */
 exports.allBooks = (req, res) => {
-	// order by 字段 asc(ascend 升序)  desc (descend降序排列)
+	// order by 分组字段 asc(ascend 升序)  desc (descend降序排列)
 	const sql = 'SELECT *from book order by id asc';
-	db.base(sql, null, results => {
+	db.base(sql, null, (results) => {
 		console.log(results);
 		// json格式数据
 		res.json(results);
@@ -37,7 +37,7 @@ exports.addBook = (req, res) => {
 	console.log(info);
 	const sql = 'insert into book set ?';
 	db.base(sql, info, (results) => {
-		console.log('我执行了吗？');
+		// console.log('我执行了吗？');
 		if (results.affectedRows === 1) {
 			console.log(sql + '\n你成功添加一条数据!');
 			res.json({
@@ -125,7 +125,16 @@ exports.getPageBooks = (req, res) => {
 	console.log(typeof info.size);
 	const offset = info.size * (info.curPage - 1);
 	const size = info.size;
-	// 使用inner join进行分页查询 limit [offset偏移量，默认从0开始，可选值]，size
+	// 使用inner join进行分页查询 limit [offset偏移量，默认从0开始，可选值]，size表示取出的数据条数
+	/**
+	 * 
+	 * inner join 内连接
+	 * a.自链接
+	 * b.等值连接
+	 * c.不等值连接
+	 * 
+	 * 
+	 */
 	const sql = `select * from book as a inner join (select id from book order by id limit 
   ${offset},${size}) as b on a.id=b.id order by a.id`;
 	// 存储合并后的结果集
@@ -151,7 +160,9 @@ exports.getPageBooks = (req, res) => {
 		});
 		return p1;
 	}
-	const sql2 = 'select count(1) as total from book';
+	// https://www.cnblogs.com/xiaozengzeng/p/12078845.html
+	// count(1)和count(*)聚合函数，有主键id,用count(*)快一些
+	const sql2 = 'select count(*) as total from book';
 
 	function p2() {
 		const p2 = new Promise((resolve, reject) => {
@@ -162,6 +173,8 @@ exports.getPageBooks = (req, res) => {
 		return p2;
 	}
 	Promise.all([p1(), p2()]).then((val) => {
+		// val[0] p1的.then后的返回值，val[1] p2 .then后的返回值
+		// lodash的官网：https://www.lodashjs.com/
 		const last = _.assignIn(val[0], val[1], {
 			pagenum: info.curPage
 		});

@@ -1,5 +1,8 @@
 /**
  * 本项目：配合vue-recall项目 实现element+vue+express+mysql+cors 前后端分离项目（图书管理案例）
+ * 
+ * 前后台 foreground-background
+ * 前端、后端 front-end back-end
  *
  * 开发后台接口-restful形式的数据接口
  * 关于RESTFUL 参考：https://blog.csdn.net/qq_41606973/article/details/86352787
@@ -57,7 +60,7 @@ const cors = require('cors');
  第一种跨域解决方案：app.use(cors({origin:'',credentials:true}));
  对象可以传值也可以不传。不传则就是对所有请求跨域
 */
-// a.对客户端所有请求跨域
+// a.对客户端所有请求跨域，credentials意为“资质，凭证”
 app.use(cors({ origin: 'http://localhost:8787', credentials: true }));
 // b.对于单个或者多个域名跨域
 
@@ -66,17 +69,25 @@ app.use(cors({ origin: 'http://localhost:8787', credentials: true }));
 //   credentials: true
 // }))
 
-// 托管静态资源文件
+// 托管静态资源文件，express的中间件函数，express.static()
 // 设置虚拟目录 /www 访问时，需要加上
 // app.use('/www', express.static('public'));
 app.use('/', express.static('public'));
 // body-parser中间件，是用来解析http请求体的。参考：https://blog.csdn.net/DlMmU/article/details/55563090
+// 参考官网：https://github.com/expressjs/body-parser#bodyparserurlencodedoptions
+// 参考简书：https://www.jianshu.com/p/4ebcc5acff45
+// body-parser中间件---用来解析四种格式的数据
+// 1.text
+// 2.json 解析application/json格式字符串，bodyParser.json();
+// 3.raw
+// 4.post提交的字符串，application/x-www-form-urlencoded,bodyParser.urlencoded({extended:false})，代表按钮，表单提交
 const bodyParser = require('body-parser');
 // 解析提交的字符串（application/x-www-form-urlencoded）,使得node后台支持该种请求体，否则service.js文件中req.body拿不到值
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 // 解析提交的json格式字符串(application/json)，前端axios有时候post请求方式，需要声明该语句
 app.use(bodyParser.json());
 // 添加一个中间件函数，实现跨域请求，参考：https://www.cnblogs.com/pdcan/p/12201930.html
+// 语法：res.header('短横线的键要加引号'，键值)
 // app.all('*', (req, res, next) => {
 // 	// 设置跨域域名的三种方式：
 // 	// 1.设置允许跨域的域名，'*'代表所有域名都可以跨域
