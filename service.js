@@ -138,9 +138,9 @@ exports.getPageBooks = (req, res) => {
 	// 1.传统的扫描文本的方式，效率低下
 	// const sql=`select *from book order by id limit ${offset},${size}`;
 	// 2.使用子查询的方式，先获取到当前页的第一条记录的id，索引的方式，速度提高20倍
-	// const sql = `select * from book where id>=(select id from book order by id limit ${offset},1) limit ${size}`;
-	// 3.使用join连接的方式
-	const sql = `select * from book as a join (select id from book order by id limit ${offset},1) as b where a.id>=b.id order by a.id limit ${size}`;
+	const sql = `select * from book where id>=(select id from book order by id limit ${offset},1) limit ${size}`;
+	// 3.使用join连接的方式---这种方式会改变原来表的id
+	// const sql = `select * from book as a join (select id from book order by id limit ${offset},1) as b where a.id>=b.id order by a.id limit ${size}`;
 	// 4.效率应该是介于第一种方式或第二种/第三种方式之间
 	// const sql = `select * from book as a inner join (select id from book order by id limit
 	// ${offset},${size}) as b on a.id=b.id order by a.id`;
@@ -182,6 +182,7 @@ exports.getPageBooks = (req, res) => {
 	Promise.all([p1(), p2()]).then((val) => {
 		// val[0] p1的.then后的返回值，val[1] p2 .then后的返回值
 		// lodash的官网：https://www.lodashjs.com/
+		console.log(val[0]);
 		const last = _.assignIn(val[0], val[1], {
 			pagenum: info.curPage
 		});
