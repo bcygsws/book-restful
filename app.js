@@ -97,7 +97,7 @@ app.use(bodyParser.json());
 // 	// 3.如果是要设置多个域名的跨域，可以用数组来存放域名
 // 	// let originList = ['http://localhost:8787'];
 // 	// // 数组中是否包含某个元素。如果这个分支成立，说明从客户端发来请求的域名，req.headers.origin存在于数组元素之中
-// 	// if (originList.includes(req.headers.origin.toLowerCase())) {
+// 	// if (originList.includes(req.headers.origin)) {
 // 	// 	// req.headers是属性 req.headers.origin req.header()是方法，req.method是属性，表示请求方式
 // 	// 	res.header('Access-Control-Allow-Origin', req.headers.origin);
 // 	// }
